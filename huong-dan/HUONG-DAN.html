@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn thiệp cưới Vũ &amp; Như</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,600;1,500&display=swap">
+<style>
+:root { --paper:#FBF8F2; --cream:#F3EBDE; --ink:#33281F; --ink2:#6B5B4D; --gold:#A88250; --gold-d:#85633A; --rule:#DCCAAB; --warn:#9A3B2E; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.65 "Be Vietnam Pro", system-ui, sans-serif; }
+main { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+h1 { font: 600 40px/1.15 "Cormorant Garamond", Georgia, serif; margin: 0 0 6px; text-wrap: balance; }
+h2 { font: 600 28px/1.2 "Cormorant Garamond", Georgia, serif; margin: 48px 0 10px; padding-top: 22px; border-top: 1px solid var(--rule); }
+h3 { font-size: 16px; margin: 26px 0 6px; }
+p.sub { color: var(--ink2); margin: 0 0 22px; }
+nav { background: var(--cream); border-radius: 14px; padding: 16px 20px; }
+nav ol { margin: 0; padding-left: 20px; } nav a { color: var(--ink); }
+ol.steps { padding-left: 0; list-style: none; counter-reset: s; }
+ol.steps > li { counter-increment: s; position: relative; padding: 0 0 14px 44px; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 600; display: grid; place-items: center; }
+code, kbd { font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: #fff; border: 1px solid var(--rule); border-radius: 6px; padding: 1px 6px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font: 13.5px/1.5 ui-monospace, Menlo, monospace; }
+.menu { font-weight: 600; color: var(--gold-d); }
+.note { background: #fff; border-left: 3px solid var(--gold); padding: 10px 14px; border-radius: 0 10px 10px 0; margin: 12px 0; }
+.warn { border-left-color: var(--warn); }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { background: var(--cream); font-weight: 600; }
+.wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+<h1>Hướng dẫn thiệp cưới online Vũ &amp; Như</h1>
+<p class="sub">Lễ Vu Quy · 10:00 Thứ Bảy, 17.10.2026 · Sân bóng thôn An Bình, Quảng Ngãi</p>
+
+<nav>
+<ol>
+  <li><a href="#cau-truc">Thư mục có gì</a></li>
+  <li><a href="#github">Đưa thiệp lên mạng (GitHub Pages)</a></li>
+  <li><a href="#preview">Link preview: tên, ngày, ảnh, lời mời khi dán link</a></li>
+  <li><a href="#nhac">Nhạc nền phát sau khi mở phong bì</a></li>
+  <li><a href="#sheet">Kết nối Google Sheet (làm một lần)</a></li>
+  <li><a href="#rsvp">Xem danh sách khách xác nhận tham dự</a></li>
+  <li><a href="#loi-chuc">Quản lý lời chúc phúc</a></li>
+  <li><a href="#link-moi">Tạo link mời kèm tên từng khách</a></li>
+  <li><a href="#su-co">Xử lý sự cố</a></li>
+</ol>
+</nav>
+
+<h2 id="cau-truc">1. Thư mục có gì</h2>
+<div class="wrap"><table>
+<tr><th>Tệp / thư mục</th><th>Dùng để</th></tr>
+<tr><td><code>index.html</code></td><td>Nội dung thiệp và thẻ link preview</td></tr>
+<tr><td><code>css/style.css</code></td><td>Màu sắc, kiểu chữ, hiệu ứng</td></tr>
+<tr><td><code>js/main.js</code></td><td>Bì thư, nhạc, đếm ngược, album, form. Khối <code>CONFIG</code> ở đầu file là nơi điền link nhạc (<code>musicUrl</code>), link Google Sheet (<code>sheetApi</code>), bản đồ (<code>mapUrl</code>, <code>mapEmbed</code>)</td></tr>
+<tr><td><code>img/</code></td><td>Ảnh của thiệp (thay ảnh: chép đè, giữ nguyên tên)</td></tr>
+<tr><td><code>og-image.jpg</code></td><td>Ảnh hiện khi dán link vào Zalo / Messenger / Facebook</td></tr>
+<tr><td><code>music/</code></td><td>Để file nhạc nền <code>nhac-nen.mp3</code></td></tr>
+<tr><td><code>huong-dan/Code.gs</code></td><td>Đoạn mã dán vào Google Sheet</td></tr>
+<tr><td><code>huong-dan/HUONG-DAN.html</code></td><td>Hướng dẫn này</td></tr>
+<tr><td><code>README.md</code>, <code>.nojekyll</code>, <code>.gitignore</code></td><td>Tệp dành cho GitHub, không cần sửa</td></tr>
+</table></div>
+<h3>Thêm / bớt ảnh trong album</h3>
+<p>Album gồm một ảnh lớn và dải ảnh nhỏ bên dưới. Dải ảnh nhỏ là slider ngang, bao nhiêu ảnh cũng được, khách vuốt ngang để xem thêm. Ảnh ngang hay dọc đều dùng được: ảnh lớn hiện trọn ảnh, ảnh nhỏ tự cắt cho vừa khung.</p>
+<ol class="steps">
+  <li>Chép ảnh mới vào thư mục <code>img/</code>. Nên dùng ảnh <strong>.jpg</strong>, cạnh dài khoảng 1800px, chất lượng khoảng 80%, thường chỉ 70–150 KB mỗi ảnh. Ảnh gốc từ máy ảnh (15–35 MB) phải thu nhỏ trước, có thể làm miễn phí tại <code>squoosh.app</code>.</li>
+  <li>(Không bắt buộc) Tạo thêm một bản nhỏ cùng tên, rộng 360px, đặt trong <code>img/thumbs/</code>, để dải ảnh nhỏ tải nhanh hơn. Thiếu bản nhỏ thì thiệp tự dùng ảnh lớn.</li>
+  <li>Mở <code>js/main.js</code>, tìm danh sách <code>album: [ … ]</code> ở đầu tệp và thêm một dòng cho mỗi ảnh:
+<pre>album: [
+  'img/album-1.jpg',
+  …
+  'img/album-6.jpg',
+  'img/album-7.jpg',
+  'img/album-8.jpg'
+],</pre>
+  Mỗi dòng cách nhau bằng dấu phẩy, dòng cuối không cần dấu phẩy.</li>
+  <li>Thứ tự trong danh sách là thứ tự hiển thị, ảnh đầu tiên là ảnh lớn khi mở album. Muốn bớt ảnh thì xoá dòng tương ứng.</li>
+</ol>
+<p>Sửa các tệp bằng VS Code (miễn phí) hoặc TextEdit/Notepad. Khi lưu, giữ định dạng <strong>UTF-8</strong> để không lỗi dấu tiếng Việt.</p>
+
+<h2 id="github">2. Đưa thiệp lên mạng (GitHub Pages)</h2>
+<p>Thiệp nằm trong repo <code>github.com/vu-nhu/thiep-cuoi</code>. Link thiệp: <code>https://vu-nhu.github.io/thiep-cuoi/</code></p>
+<h3>Bật GitHub Pages (làm một lần)</h3>
+<ol class="steps">
+  <li>Mở repo trên GitHub, vào <span class="menu">Settings → Pages</span>.</li>
+  <li>Ở mục <em>Build and deployment</em>: <span class="menu">Source: Deploy from a branch</span>, <span class="menu">Branch: main</span>, thư mục <span class="menu">/ (root)</span>, bấm <span class="menu">Save</span>.</li>
+  <li>Chờ 1–2 phút rồi mở <code>https://vu-nhu.github.io/thiep-cuoi/</code>. Tiến độ xem ở tab <span class="menu">Actions</span> của repo.</li>
+</ol>
+<h3>Mỗi lần sửa thiệp</h3>
+<ul>
+  <li><strong>Dùng Terminal:</strong> mở thư mục thiệp rồi chạy <code>git add -A</code>, <code>git commit -m "Nội dung đã sửa"</code>, <code>git push</code>. Khoảng 1 phút sau link thiệp tự cập nhật.</li>
+  <li><strong>Không dùng Terminal:</strong> cài <strong>GitHub Desktop</strong> (miễn phí), chọn <span class="menu">File → Add local repository</span> trỏ tới thư mục thiệp, rồi bấm <span class="menu">Commit</span> và <span class="menu">Push origin</span>.</li>
+  <li>Sửa nhanh một tệp: mở tệp trên trang GitHub, bấm biểu tượng ✏️, sửa xong bấm <span class="menu">Commit changes</span>.</li>
+</ul>
+<div class="note">Repo GitHub Pages miễn phí là <strong>công khai</strong>: ai có link repo cũng xem được ảnh và thông tin trong thiệp, giống như xem chính trang thiệp.</div>
+
+<h2 id="preview">3. Link preview khi dán link</h2>
+<p>Khi dán link vào Zalo, Messenger hay Facebook, khách sẽ thấy:</p>
+<ul>
+  <li><strong>Tiêu đề:</strong> Phan Vũ &amp; Quỳnh Như · Lễ Vu Quy 17.10.2026</li>
+  <li><strong>Lời mời:</strong> Trân trọng kính mời bạn đến dự Lễ Vu Quy… 10:00 Thứ Bảy, 17.10.2026… Sân bóng thôn An Bình, Quảng Ngãi</li>
+  <li><strong>Ảnh:</strong> <code>og-image.jpg</code>, gồm ảnh cưới, tên hai bạn, ngày cưới và địa điểm.</li>
+</ul>
+<h3>Nếu đổi sang link khác (ví dụ tên miền riêng)</h3>
+<p>Mở <code>index.html</code>, tìm khối có ghi chú <code>LINK PREVIEW</code> ở đầu tệp và thay <code>https://vu-nhu.github.io/thiep-cuoi/</code> bằng link của bạn ở <strong>tất cả</strong> các dòng trong khối đó. Zalo và Facebook cần địa chỉ đầy đủ mới hiện được ảnh.</p>
+<h3>Kiểm tra và làm mới preview</h3>
+<ul>
+  <li><strong>Facebook / Messenger:</strong> vào <code>developers.facebook.com/tools/debug</code>, dán link, bấm <span class="menu">Scrape Again</span>.</li>
+  <li><strong>Zalo</strong> lưu preview cũ khá lâu. Muốn Zalo lấy bản mới, thêm <code>?v=2</code> vào cuối link (lần sau dùng <code>?v=3</code>…).</li>
+  <li>Mọi khách nhận cùng một preview. Tên riêng của từng khách hiện trên phong bì sau khi mở link.</li>
+</ul>
+<div class="note">Nếu đổi ảnh bìa và muốn ảnh preview đổi theo, cần làm lại <code>og-image.jpg</code> (kích thước 1200 × 630, giữ nguyên tên tệp).</div>
+
+<h3>Bản đồ trong thiệp</h3>
+<p>Thẻ Lễ Vu Quy có khung bản đồ xem trước và nút <strong>Chỉ đường</strong> (mở Google Maps chỉ đường tới đúng điểm). Muốn đổi địa điểm, sửa 2 dòng trong <code>CONFIG</code> của <code>js/main.js</code>, thay toạ độ <code>15.1729883,108.658986</code> bằng toạ độ mới:</p>
+<pre>mapUrl: 'https://www.google.com/maps/dir/?api=1&amp;destination=15.1729883,108.658986',
+mapEmbed: 'https://www.google.com/maps?q=15.1729883,108.658986&amp;output=embed',</pre>
+<p>Lấy toạ độ: mở Google Maps, nhấn giữ vào điểm cần ghim, toạ độ hiện ở ô tìm kiếm (dạng <code>15.17…, 108.65…</code>). Bỏ dấu cách sau dấu phẩy khi dán.</p>
+
+<h2 id="nhac">4. Nhạc nền phát sau khi mở phong bì</h2>
+<p>Nhạc bắt đầu phát khi khách <strong>chạm vào con dấu</strong> để mở phong bì. Trình duyệt trên điện thoại không cho tự phát nhạc trước khi người xem chạm vào màn hình. Nút đĩa nhạc ở góc phải dùng để tắt/bật lại. Nhạc tự dừng khi khách chuyển sang ứng dụng khác.</p>
+<h3>Cách 1 (khuyên dùng): để file nhạc trong thư mục thiệp</h3>
+<ol class="steps">
+  <li>Chuẩn bị bài hát dạng <strong>.mp3</strong>, nên dưới 6 MB (128 kbps là đủ hay).</li>
+  <li>Đổi tên tệp thành <code>nhac-nen.mp3</code> và chép vào thư mục <code>music/</code>.</li>
+  <li>Commit và push lên GitHub (mục 2). Không cần sửa mã.</li>
+</ol>
+<h3>Cách 2: dùng link nhạc có sẵn</h3>
+<p>Mở <code>js/main.js</code>, tìm dòng <code>musicUrl:</code> và dán link vào giữa hai dấu nháy:</p>
+<pre>musicUrl: 'https://ten-trang.com/bai-hat.mp3',</pre>
+<div class="note warn">Link phải trỏ <strong>thẳng tới tệp nhạc</strong> (thường có đuôi <code>.mp3</code> hoặc <code>.m4a</code>). Link YouTube, Spotify, Zing MP3, NhacCuaTui, TikTok là trang web chứ không phải tệp nhạc, nên không phát được. Link Google Drive cũng hay bị chặn trên iPhone. Cách 1 ổn định nhất.</div>
+<p>Nếu tệp nhạc lỗi hoặc thiếu, thiệp tự phát bản hộp nhạc <em>Canon in D</em> có sẵn nên vẫn có nhạc. Nên chọn bài bạn có quyền sử dụng.</p>
+
+<h2 id="sheet">5. Kết nối Google Sheet (làm một lần, khoảng 10 phút)</h2>
+<p>Một Google Sheet sẽ nhận cả 3 thứ: <strong>xác nhận tham dự</strong>, <strong>lời chúc phúc</strong> và <strong>danh sách khách mời kèm link riêng</strong>.</p>
+
+<h3>A. Tạo Google Sheet và dán mã</h3>
+<ol class="steps">
+  <li>Vào <strong>sheets.google.com</strong>, tạo bảng tính trống, đặt tên ví dụ <em>Thiệp cưới Vũ &amp; Như</em>.</li>
+  <li>Trên thanh menu chọn <span class="menu">Tiện ích mở rộng → Apps Script</span> (<em>Extensions → Apps Script</em>). Một tab mới mở ra.</li>
+  <li>Xoá hết mã mẫu trong tệp <code>Mã.gs</code> / <code>Code.gs</code>. Mở tệp <code>huong-dan/Code.gs</code> trong thư mục thiệp, sao chép <strong>toàn bộ</strong> và dán vào. Bấm biểu tượng 💾 để lưu.</li>
+  <li>Ở thanh trên cùng, chọn hàm <code>caiDat</code> trong ô danh sách, bấm <span class="menu">▶ Chạy</span> (<em>Run</em>).</li>
+  <li>Google hỏi quyền: bấm <span class="menu">Xem xét quyền</span> và chọn tài khoản của bạn. Nếu hiện <em>“Google chưa xác minh ứng dụng này”</em>, bấm <span class="menu">Nâng cao → Đi tới … (không an toàn)</span> rồi <span class="menu">Cho phép</span>. Đây là mã của chính bạn, chỉ ghi vào bảng tính này.</li>
+  <li>Quay lại tab Google Sheet: đã có 4 trang tính <strong>Khách mời</strong>, <strong>Xác nhận</strong>, <strong>Lời chúc</strong>, <strong>Cài đặt</strong>. Tải lại trang sẽ thấy menu <span class="menu">💌 Thiệp cưới</span>.</li>
+</ol>
+
+<h3>B. Triển khai thành ứng dụng web</h3>
+<ol class="steps">
+  <li>Trong Apps Script, bấm <span class="menu">Triển khai → Tùy chọn triển khai mới</span> (<em>Deploy → New deployment</em>).</li>
+  <li>Bấm bánh răng ⚙ cạnh <em>Chọn loại</em>, chọn <span class="menu">Ứng dụng web</span> (<em>Web app</em>).</li>
+  <li>Điền:
+    <ul>
+      <li>Mô tả: <code>Thiệp cưới</code></li>
+      <li>Thực thi với tư cách (<em>Execute as</em>): <strong>Tôi</strong> (<em>Me</em>)</li>
+      <li>Người có quyền truy cập (<em>Who has access</em>): <strong>Bất kỳ ai</strong> (<em>Anyone</em>)</li>
+    </ul>
+  </li>
+  <li>Bấm <span class="menu">Triển khai</span>, rồi sao chép <strong>URL ứng dụng web</strong>, dạng <code>https://script.google.com/macros/s/AKfy…/exec</code>.</li>
+  <li>Kiểm tra: dán URL vào trình duyệt, thêm <code>?action=wishes</code> ở cuối. Nếu thấy <code>{"ok":true,"wishes":[]}</code> là đã chạy.</li>
+</ol>
+<div class="note">Phải chọn đúng <strong>“Bất kỳ ai”</strong> thì khách mới gửi được. Khách chỉ gửi được thông tin vào bảng tính, không xem được bảng tính của bạn. Thiệp chỉ đọc lại những lời chúc đang bật “Hiển thị”.</div>
+
+<h3>C. Gắn link vào thiệp</h3>
+<ol class="steps">
+  <li>Mở <code>js/main.js</code>, tìm dòng <code>sheetApi: ''</code> ở đầu tệp và dán URL vào giữa hai dấu nháy:
+<pre>sheetApi: 'https://script.google.com/macros/s/AKfy…/exec'</pre></li>
+  <li>Trong Google Sheet, trang <strong>Cài đặt</strong>, ô <strong>B1</strong>: điền link thiệp (<code>https://vu-nhu.github.io/thiep-cuoi/</code>). Ô <strong>B2</strong> là mẫu tin nhắn mời, sửa tuỳ ý (giữ <code>{ten}</code> và <code>{link}</code>).</li>
+  <li>Commit và push lên GitHub. Từ giờ dòng “Bản xem thử…” trong form sẽ biến mất.</li>
+</ol>
+<div class="note warn">Khi sửa mã Apps Script sau này (kể cả khi dán bản <code>Code.gs</code> mới), đừng tạo triển khai mới vì URL sẽ đổi. Làm thế này:
+<ol>
+  <li>Dán đè toàn bộ mã mới, bấm 💾.</li>
+  <li>Vào <span class="menu">Triển khai → Quản lý các tùy chọn triển khai</span>, bấm ✏️, chọn <em>Phiên bản: Phiên bản mới</em>, bấm <span class="menu">Triển khai</span>. URL giữ nguyên.</li>
+  <li>Chọn hàm <code>caiDat</code>, bấm <span class="menu">▶ Chạy</span> một lần để cập nhật định dạng. Dữ liệu cũ được giữ nguyên.</li>
+</ol></div>
+<h3>Về tốc độ gửi</h3>
+<p>Mỗi lần gửi tới Google Apps Script mất khoảng 2–4 giây. Nếu lâu không ai gửi, lần đầu có thể tới 5–10 giây. Đây là tốc độ của dịch vụ miễn phí của Google. Thiệp không bắt khách chờ khoảng đó:</p>
+<ul>
+  <li>Bấm gửi là thấy kết quả ngay. Dòng nhỏ "Đang gửi đến cô dâu chú rể…" chuyển thành "✓ Đã gửi" khi Google nhận xong.</li>
+  <li>Nếu mạng lỗi, thiệp hiện nút <strong>Gửi lại</strong>. Khách lỡ đóng trang khi chưa gửi xong thì lần mở sau thiệp tự gửi lại.</li>
+  <li>Sổ lưu bút hiện ngay bản đã lưu trên máy khách rồi mới cập nhật bản mới. Danh sách lời chúc cũng được Google lưu tạm nên tải nhanh hơn.</li>
+</ul>
+
+<h2 id="rsvp">6. Xem danh sách khách xác nhận tham dự</h2>
+<p>Mỗi lần khách bấm <strong>Gửi xác nhận</strong>, trang <strong>Xác nhận</strong> có thêm một dòng:</p>
+<div class="wrap"><table>
+<tr><th>Thời gian</th><th>Mã khách</th><th>Họ tên</th><th>Khách của</th><th>Tham dự</th><th>Số người</th><th>Lời nhắn</th></tr>
+<tr><td>17/10 09:12</td><td>k7f3qa</td><td>Minh</td><td>Nhà trai</td><td>Sẽ đến</td><td>3</td><td>…</td></tr>
+</table></div>
+<ul>
+  <li>Khách mở bằng <strong>link mời riêng</strong> (mục 8) thì kết quả cũng tự cập nhật vào dòng của họ ở trang <strong>Khách mời</strong>: cột <em>Trạng thái</em>, <em>Số người</em>, <em>Xác nhận lúc</em>.</li>
+  <li>Khách sửa phản hồi: thêm dòng mới ở trang Xác nhận, trạng thái ở trang Khách mời lấy theo lần gửi gần nhất.</li>
+  <li>Đếm tổng số người sẽ đến: ở một ô trống, gõ <code>=SUMIF('Xác nhận'!E:E;"Sẽ đến";'Xác nhận'!F:F)</code> (nếu báo lỗi, đổi <code>;</code> thành <code>,</code>). Nếu có khách gửi hai lần, đếm theo cột <em>Số người</em> ở trang Khách mời sẽ chính xác hơn.</li>
+</ul>
+
+<h2 id="loi-chuc">7. Quản lý lời chúc phúc</h2>
+<ul>
+  <li>Lời chúc khách gửi được lưu ở trang <strong>Lời chúc</strong>. Thiệp hiện <strong>sổ lưu bút chung</strong>: khách nào mở thiệp cũng thấy lời chúc của mọi người, mới nhất ở trên.</li>
+  <li>Muốn ẩn một lời chúc, <strong>bỏ tick</strong> ô <em>Hiển thị</em> ở dòng đó. Thiệp sẽ không hiện lời chúc này ở lần tải tiếp theo. Tick lại để hiện.</li>
+  <li>Đừng đổi tên trang tính hay thứ tự cột, vì mã dựa vào đó.</li>
+</ul>
+
+<h2 id="link-moi">8. Tạo link mời kèm tên từng khách</h2>
+<ol class="steps">
+  <li>Mở trang <strong>Khách mời</strong>. Mỗi khách một dòng:
+    <ul>
+      <li>Cột <strong>B</strong>: tên hiện trên thiệp, ví dụ <em>Anh Minh &amp; gia đình</em>, <em>Cô Hoa</em>, <em>Bạn Lan Anh</em>.</li>
+      <li>Cột <strong>C</strong>: <em>Nhà trai</em> hoặc <em>Nhà gái</em> (để chọn sẵn trong form xác nhận).</li>
+      <li>Cột <strong>D</strong>: ghi chú tuỳ ý. Cột A để trống.</li>
+    </ul>
+  </li>
+  <li>Bấm menu <span class="menu">💌 Thiệp cưới → Tạo / cập nhật link mời</span>. Cột A tự có mã khách, cột E có link riêng, cột F có tin nhắn mời soạn sẵn.</li>
+  <li>Sao chép ô ở cột <strong>F</strong> và dán vào Zalo/Messenger gửi cho khách đó.</li>
+  <li>Thêm khách mới: điền tiếp dòng mới rồi bấm lại menu. Mã và link của khách cũ giữ nguyên.</li>
+</ol>
+<p>Khi khách mở link riêng:</p>
+<ul>
+  <li>Phong bì ghi <strong>“Thân gửi Anh Minh &amp; gia đình”</strong>, lời mời ghi <strong>“Trân trọng kính mời Anh Minh &amp; gia đình”</strong>.</li>
+  <li>Form xác nhận và sổ lưu bút điền sẵn tên, chọn sẵn Nhà trai/Nhà gái.</li>
+  <li>Cột <strong>G – Mở thiệp lần cuối</strong> ghi lại thời điểm khách mở phong bì, để biết ai đã xem.</li>
+</ul>
+<div class="note">Không dùng Google Sheet vẫn tự làm link riêng được: thêm <code>?to=</code> và tên khách vào cuối link, viết dấu cách là <code>%20</code>. Ví dụ <code>https://vu-nhu.github.io/thiep-cuoi/?to=Cô%20Hoa</code>.</div>
+
+<h2 id="su-co">9. Xử lý sự cố</h2>
+<div class="wrap"><table>
+<tr><th>Hiện tượng</th><th>Cách xử lý</th></tr>
+<tr><td>Gửi xong mà vài giây sau mới hiện "✓ Đã gửi"</td><td>Bình thường, do tốc độ của Google Apps Script (xem "Về tốc độ gửi" ở mục 5). Khách không cần chờ.</td></tr>
+<tr><td>Form báo “Chưa gửi được”</td><td>Kiểm tra <code>sheetApi</code> đúng URL đuôi <code>/exec</code>, triển khai với quyền “Bất kỳ ai”. Thử mở URL + <code>?action=wishes</code> trên trình duyệt.</td></tr>
+<tr><td>Sửa mã Apps Script nhưng không thấy thay đổi</td><td>Phải cập nhật phiên bản triển khai (xem khung lưu ý ở mục 5C).</td></tr>
+<tr><td>Không có nhạc</td><td>Kiểm tra tên tệp đúng <code>music/nhac-nen.mp3</code> (chữ thường, không dấu). Trên iPhone, gạt tắt chế độ im lặng. Nếu chỉ nghe tiếng hộp nhạc thì tệp nhạc đang lỗi hoặc link không phải tệp .mp3.</td></tr>
+<tr><td>Dán link không hiện ảnh</td><td>Kiểm tra link trong khối LINK PREVIEW của <code>index.html</code> trùng với link thiệp. Làm mới bằng Facebook Debugger, hoặc thêm <code>?v=2</code> khi gửi qua Zalo.</td></tr>
+<tr><td>Lời chúc không hiện trên thiệp</td><td>Ô <em>Hiển thị</em> phải được tick. Tải lại trang thiệp.</td></tr>
+<tr><td>Link Claude không lưu vào Google Sheet</td><td>Đúng vậy: bản xem trên Claude không được phép gửi dữ liệu ra ngoài. Hãy gửi khách link GitHub Pages.</td></tr>
+</table></div>
+</main>
+</body>
+</html>
