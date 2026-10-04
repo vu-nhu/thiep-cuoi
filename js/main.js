@@ -67,7 +67,22 @@
     GUEST.id = (q.get('id') || '').replace(/[^\w-]/g, '').slice(0, 20);
     var ben = (q.get('ben') || '').toLowerCase();
     GUEST.side = ben === 'gai' ? 'Nhà gái' : ben === 'trai' ? 'Nhà trai' : '';
-    if (GUEST.name) $$('.guest-name').forEach(function (el) { el.textContent = GUEST.name; });
+    if (GUEST.name) {
+      $$('.guest-name').forEach(function (el) { el.textContent = GUEST.name; });
+
+      // Cá nhân hóa mô tả trang theo tên trong link do Google Sheet tạo.
+      var desc = 'Trân trọng kính mời ' + GUEST.name
+        + ' đến dự Lễ Vu Quy của Phan Vũ & Quỳnh Như lúc 10:00, Thứ Bảy 17.10.2026 '
+        + '(tức 08/09 năm Bính Ngọ) tại Sân bóng thôn An Bình, Quảng Ngãi.';
+      [
+        'meta[name="description"]',
+        'meta[property="og:description"]',
+        'meta[name="twitter:description"]'
+      ].forEach(function (selector) {
+        var meta = $(selector);
+        if (meta) meta.setAttribute('content', desc);
+      });
+    }
   } catch (e) {}
 
   /* ---- Google Sheet (Apps Script) ---- */
