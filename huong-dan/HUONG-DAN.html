@@ -100,7 +100,7 @@ th { background: var(--cream); font-weight: 600; }
 <p>Khi dán link vào Zalo, Messenger hay Facebook, khách sẽ thấy:</p>
 <ul>
   <li><strong>Tiêu đề:</strong> Phan Vũ &amp; Quỳnh Như · Lễ Vu Quy 17.10.2026</li>
-  <li><strong>Lời mời:</strong> Trân trọng kính mời bạn đến dự Lễ Vu Quy… 10:00 Thứ Bảy, 17.10.2026… Sân bóng thôn An Bình, Quảng Ngãi</li>
+  <li><strong>Lời mời:</strong> Trân trọng kính mời quý khách đến dự Lễ Vu Quy… 10:00 Thứ Bảy, 17.10.2026… Sân bóng thôn An Bình, Quảng Ngãi</li>
   <li><strong>Ảnh:</strong> <code>og-image.jpg</code>, gồm ảnh cưới, tên hai bạn, ngày cưới và địa điểm.</li>
 </ul>
 <h3>Nếu đổi sang link khác (ví dụ tên miền riêng)</h3>
@@ -209,6 +209,7 @@ mapEmbed: 'https://www.google.com/maps?q=15.1729883,108.658986&amp;output=embed'
       <li>Cột <strong>B</strong>: tên hiện trên thiệp, ví dụ <em>Anh Minh &amp; gia đình</em>, <em>Cô Hoa</em>, <em>Bạn Lan Anh</em>.</li>
       <li>Cột <strong>C</strong>: <em>Nhà trai</em> hoặc <em>Nhà gái</em> (để chọn sẵn trong form xác nhận).</li>
       <li>Cột <strong>D</strong>: ghi chú tuỳ ý. Cột A để trống.</li>
+      <li>Cột <strong>K – Ký tên lời cảm ơn</strong>: để trống hoặc chọn <em>Vũ &amp; Như</em> là mặc định; chọn <em>Sang &amp; Nga</em> để phần Thank You ký tên Sang &amp; Nga.</li>
     </ul>
   </li>
   <li>Bấm menu <span class="menu">💌 Thiệp cưới → Tạo / cập nhật link mời</span>. Cột A tự có mã khách, cột E có link riêng, cột F có tin nhắn mời soạn sẵn.</li>
@@ -221,7 +222,7 @@ mapEmbed: 'https://www.google.com/maps?q=15.1729883,108.658986&amp;output=embed'
   <li>Form xác nhận và sổ lưu bút điền sẵn tên, chọn sẵn Nhà trai/Nhà gái.</li>
   <li>Cột <strong>G – Mở thiệp lần cuối</strong> ghi lại thời điểm khách mở phong bì, để biết ai đã xem.</li>
 </ul>
-<div class="note">Link do Google Sheet tạo chỉ chứa mã khách (ví dụ <code>?to=k7f3qa</code>); tên được thiệp đọc từ Sheet khi mở nên không xuất hiện dưới dạng ký tự mã hoá trên URL. Không dùng Google Sheet, bạn vẫn có thể tự thêm <code>?to=</code> và tên khách vào link, nhưng tên tiếng Việt sẽ được trình duyệt mã hoá.</div>
+<div class="note">Link do Google Sheet tạo chứa tên khách và mã khách (ví dụ <code>?to=Anh%20Minh&amp;id=k7f3qa</code>), nên bì thư hiện tên ngay mà không cần đọc Sheet. Nếu chọn <em>Sang &amp; Nga</em> ở cột K, link có thêm <code>&amp;sent=bame</code>.</div>
 
 <h2 id="su-co">9. Xử lý sự cố</h2>
 <div class="wrap"><table>

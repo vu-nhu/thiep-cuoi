@@ -59,7 +59,7 @@
     clearTimeout(toast._t); toast._t = setTimeout(function () { t.hidden = true; }, 2200);
   }
 
-  /* ---- khách mời từ link: ?to=k7f3qa&ben=trai (mã do Google Sheet tạo) ---- */
+  /* ---- khách mời từ link: ?to=Anh%20Minh&id=k7f3qa&ben=trai (link tạo từ Google Sheet) ---- */
   var GUEST = { name: '', id: '', side: '' };
   function applyGuestInfo(info) {
     if (!info || !info.name) return;
@@ -88,12 +88,17 @@
     var q = new URLSearchParams(location.search);
     var to = (q.get('to') || '').trim();
     var id = (q.get('id') || '').trim();
+    var sent = (q.get('sent') || '').trim().toLowerCase();
     GUEST.id = (id || to).replace(/[^\w-]/g, '').slice(0, 20);
-    // Hỗ trợ các link cũ có ?to=Tên&id=Mã; link mới chỉ có mã trong `to`.
+    // Link mới có tên trong `to`; vẫn hỗ trợ link cũ chỉ có mã trong `to`.
     GUEST.name = (q.get('khach') || (id && to && to !== id ? to : '')).trim().slice(0, 60);
     var ben = (q.get('ben') || '').toLowerCase();
     GUEST.side = ben === 'gai' ? 'Nhà gái' : ben === 'trai' ? 'Nhà trai' : '';
     if (GUEST.name) applyGuestInfo(GUEST);
+    if (sent === 'bame') {
+      var thanksSignName = $('#thanksSignName');
+      if (thanksSignName) thanksSignName.textContent = 'Sang & Nga';
+    }
   } catch (e) {}
 
   /* ---- Google Sheet (Apps Script) ---- */
@@ -113,7 +118,7 @@
     return fetch(API + (API.indexOf('?') < 0 ? '?' : '&') + new URLSearchParams(params).toString())
       .then(function (r) { return r.json(); });
   }
-  // Link mới chỉ mang mã khách; lấy tên từ Google Sheet để không lộ tiếng Việt đã mã hóa trên URL.
+  // Chỉ tra Sheet cho các link cũ chỉ có mã; link mới đã có tên trong `to`.
   if (API && GUEST.id && !GUEST.name) {
     apiGet({ action: 'guest', id: GUEST.id }).then(function (j) {
       if (j && j.ok && j.guest) applyGuestInfo(j.guest);

@@ -28,7 +28,8 @@ const COT = {
   XAC_NHAN: ['Thời gian', 'Mã khách', 'Họ tên', 'Khách của', 'Tham dự', 'Số người', 'Lời nhắn'],
   LOI_CHUC: ['Thời gian', 'Tên', 'Lời chúc', 'Hiển thị'],
   KHACH:    ['Mã khách', 'Xưng hô & tên (hiện trên thiệp)', 'Khách của', 'Ghi chú',
-             'Link mời', 'Tin nhắn mời', 'Mở thiệp lần cuối', 'Trạng thái', 'Số người', 'Xác nhận lúc'],
+             'Link mời', 'Tin nhắn mời', 'Mở thiệp lần cuối', 'Trạng thái', 'Số người', 'Xác nhận lúc',
+             'Ký tên lời cảm ơn'],
 };
 
 const LINK_MAC_DINH = 'https://vu-nhu.github.io/thiep-cuoi/';
@@ -52,18 +53,21 @@ function onOpen() {
 /** Chạy một lần: tạo 4 trang tính, tiêu đề cột, định dạng. Chạy lại không làm mất dữ liệu. */
 function caiDat() {
   const ss = SpreadsheetApp.getActive();
-  taoTrang_(ss, TEN.KHACH, COT.KHACH, [110, 260, 100, 180, 320, 420, 150, 110, 80, 150]);
+  taoTrang_(ss, TEN.KHACH, COT.KHACH, [110, 260, 100, 180, 320, 420, 150, 110, 80, 150, 180]);
   taoTrang_(ss, TEN.XAC_NHAN, COT.XAC_NHAN, [150, 100, 200, 100, 100, 80, 320]);
   taoTrang_(ss, TEN.LOI_CHUC, COT.LOI_CHUC, [150, 180, 480, 80]);
 
   const kh = ss.getSheetByName(TEN.KHACH);
   kh.getRange('C2:C').setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(['Nhà trai', 'Nhà gái'], true).setAllowInvalid(true).build());
+  kh.getRange('K2:K').setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(['Vũ & Như', 'Sang & Nga'], true).setAllowInvalid(true).build());
   kh.getRange('F2:F').setWrap(true);
   kh.getRange('A1:D1').setBackground('#F3EBDE');
   kh.getRange('E1:J1').setBackground('#E8DCC8');
   kh.getRange('A1').setNote('Để trống — bấm menu 💌 Thiệp cưới > Tạo / cập nhật link mời để tự tạo mã.');
   kh.getRange('B1').setNote('Tên hiện trên phong bì và lời mời. Ví dụ: Anh Minh & gia đình, Cô Hoa, Bạn Lan Anh.');
+  kh.getRange('K1').setNote('Để trống hoặc chọn Vũ & Như = ký tên mặc định. Chọn Sang & Nga = link thêm sent=bame.');
 
   const lc = ss.getSheetByName(TEN.LOI_CHUC);
   lc.getRange('D1').setNote('Bỏ tick để ẩn lời chúc khỏi thiệp.');
@@ -112,7 +116,7 @@ function taoLinkMoi() {
 
   const n = kh.getLastRow() - 1;
   if (n < 1) { SpreadsheetApp.getUi().alert('Bạn nhập tên khách vào cột B của trang "Khách mời" trước nhé.'); return; }
-  const dl = kh.getRange(2, 1, n, 6).getValues();
+  const dl = kh.getRange(2, 1, n, 11).getValues();
   const daCo = {};
   dl.forEach(function (r) { if (r[0]) daCo[r[0]] = true; });
 
@@ -121,15 +125,17 @@ function taoLinkMoi() {
     const ten = String(r[1] || '').trim();
     if (!ten) { r[4] = ''; r[5] = ''; return; }
     if (!r[0]) { r[0] = maMoi_(daCo); daCo[r[0]] = true; }
-    // Chỉ đưa mã khách vào link: tên tiếng Việt vẫn được lấy an toàn từ Sheet khi mở thiệp.
-    let link = goc + '?to=' + encodeURIComponent(r[0]);
+    // Tên nằm ngay trong link để thiệp hiển thị bì thư không cần gọi Sheet;
+    // mã vẫn được giữ để theo dõi mở thiệp và xác nhận tham dự.
+    let link = goc + '?to=' + encodeURIComponent(ten) + '&id=' + r[0];
     if (r[2] === 'Nhà gái') link += '&ben=gai';
     else if (r[2] === 'Nhà trai') link += '&ben=trai';
+    if (String(r[10] || '').trim() === 'Sang & Nga') link += '&sent=bame';
     r[4] = link;
     r[5] = mau.split('{ten}').join(ten).split('{link}').join(link);
     dem++;
   });
-  kh.getRange(2, 1, n, 6).setValues(dl);
+  kh.getRange(2, 1, n, 6).setValues(dl.map(function (r) { return r.slice(0, 6); }));
   ss.toast('Đã tạo ' + dem + ' link mời. Sao chép cột "Tin nhắn mời" để gửi qua Zalo/Messenger.', '💌 Thiệp cưới', 6);
 }
 
