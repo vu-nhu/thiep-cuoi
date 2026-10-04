@@ -295,6 +295,43 @@
   })();
   musicBtn.addEventListener('click', function () { Player.toggle(); });
 
+  /* ---- tự cuộn chậm sau khi mở thiệp ----
+     Khách chạm, vuốt, lăn chuột hay bấm phím là dừng hẳn để khách tự xem.
+     Không tự cuộn nếu máy đặt "giảm chuyển động". */
+  var AutoScroll = (function () {
+    var SPEED = 50;                                   // điểm ảnh mỗi giây
+    var STOP_ON = ['touchstart', 'pointerdown', 'mousedown', 'wheel', 'keydown'];
+    var raf = 0, pos = 0, last = 0, stopped = false;
+    function stop() {
+      if (stopped) return;
+      stopped = true; cancelAnimationFrame(raf);
+      document.documentElement.classList.remove('auto-scrolling');
+      STOP_ON.forEach(function (ev) { window.removeEventListener(ev, stop, true); });
+    }
+    function step(now) {
+      if (stopped) return;
+      if (Math.abs(window.pageYOffset - pos) > 40) return stop();     // khách tự kéo thanh cuộn
+      var dt = Math.min(now - last, 100) / 1000; last = now;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      pos = Math.min(pos + SPEED * dt, max);
+      window.scrollTo(0, pos);
+      if (pos >= max) return stop();                                  // tới cuối thiệp
+      raf = requestAnimationFrame(step);
+    }
+    return {
+      arm: function (delay) {                       // nghe thao tác của khách ngay, bắt đầu cuộn sau `delay` ms
+        if (reduce) return;
+        STOP_ON.forEach(function (ev) { window.addEventListener(ev, stop, { capture: true, passive: true }); });
+        setTimeout(function () {
+          if (stopped) return;
+          document.documentElement.classList.add('auto-scrolling');
+          pos = window.pageYOffset; last = performance.now();
+          raf = requestAnimationFrame(step);
+        }, delay);
+      }
+    };
+  })();
+
   /* ---- mở bì thư ---- */
   var cover = $('#cover'), env = $('#env');
   document.documentElement.classList.add('locked');
@@ -306,7 +343,7 @@
     env.classList.add('open');
     setTimeout(function () { env.classList.add('lifted'); }, t[0]);
     setTimeout(function () { cover.classList.add('leaving'); document.documentElement.classList.remove('locked'); window.scrollTo(0, 0); Reveal.start(); }, t[1]);
-    setTimeout(function () { cover.hidden = true; startPetals(); watchFloat(); }, t[2]);
+    setTimeout(function () { cover.hidden = true; startPetals(); watchFloat(); AutoScroll.arm(2200); }, t[2]);
   }
   env.addEventListener('click', openInvite);
 

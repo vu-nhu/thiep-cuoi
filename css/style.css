@@ -30,6 +30,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html.auto-scrolling { scroll-behavior: auto; }   /* đang tự cuộn: cuộn từng khung hình, không làm mượt chồng lên */
 html.locked, html.locked body { overflow: hidden; }
 body {
   margin: 0;
@@ -293,6 +294,7 @@ a { color: inherit; }
 .venue .eyebrow { letter-spacing: .25em; }
 .venue h3 { margin: 6px 0 2px; font-family: var(--f-display); font-weight: 600; font-size: 26px; line-height: 1.2; color: var(--ink); text-wrap: balance; }
 .venue p { margin: 0; font-size: 17px; color: var(--ink-2); text-wrap: balance; }
+.venue .eyebrow { font-size: 11px; line-height: 1.4; color: var(--gold-deep); }   /* nhãn "TẠI": giữ cỡ chữ nhỏ như các nhãn khác */
 .map { position: relative; margin: 18px 0 0; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 14px; overflow: hidden;
   background: var(--cream); border: 1px solid var(--rule); box-shadow: 0 10px 24px -18px rgba(70,50,30,.5); }
 .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
