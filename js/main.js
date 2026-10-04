@@ -127,7 +127,7 @@
     + '&text=' + encodeURIComponent(CONFIG.title)
     + '&dates=' + gfmt(startD) + '/' + gfmt(endD)
     + '&location=' + encodeURIComponent(CONFIG.place)
-    + '&details=' + encodeURIComponent('Trân trọng kính mời bạn đến chung vui cùng gia đình chúng tôi.');
+    + '&details=' + encodeURIComponent('Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng tôi.');
   $$('[data-gcal]').forEach(function (a) { a.href = gcal; });
   if (CONFIG.mapUrl) $$('[data-map]').forEach(function (a) { a.href = CONFIG.mapUrl; });
   $$('[data-map-embed]').forEach(function (f) {
