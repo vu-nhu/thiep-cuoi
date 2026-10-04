@@ -59,30 +59,41 @@
     clearTimeout(toast._t); toast._t = setTimeout(function () { t.hidden = true; }, 2200);
   }
 
-  /* ---- khách mời từ link: ?to=Anh%20Minh&id=k7f3qa&ben=trai (link tạo từ Google Sheet) ---- */
+  /* ---- khách mời từ link: ?to=k7f3qa&ben=trai (mã do Google Sheet tạo) ---- */
   var GUEST = { name: '', id: '', side: '' };
+  function applyGuestInfo(info) {
+    if (!info || !info.name) return;
+    GUEST.name = String(info.name).trim().slice(0, 60);
+    if (info.side === 'Nhà gái' || info.side === 'Nhà trai') GUEST.side = info.side;
+    $$('.guest-name').forEach(function (el) { el.textContent = GUEST.name; });
+
+    var desc = 'Trân trọng kính mời ' + GUEST.name
+      + ' đến dự Lễ Vu Quy của Phan Vũ & Quỳnh Như lúc 10:00, Thứ Bảy 17.10.2026 '
+      + '(tức 08/09 năm Bính Ngọ) tại Sân bóng thôn An Bình, Quảng Ngãi.';
+    [
+      'meta[name="description"]',
+      'meta[property="og:description"]',
+      'meta[name="twitter:description"]'
+    ].forEach(function (selector) {
+      var meta = $(selector);
+      if (meta) meta.setAttribute('content', desc);
+    });
+
+    var rsvpName = $('#rsvp-name'), wishName = $('#wish-name');
+    if (rsvpName && !rsvpName.value) rsvpName.value = GUEST.name;
+    if (wishName && !wishName.value) wishName.value = GUEST.name;
+    if (GUEST.side) $$('input[name="side"]').forEach(function (r) { r.checked = r.value === GUEST.side; });
+  }
   try {
     var q = new URLSearchParams(location.search);
-    GUEST.name = (q.get('to') || q.get('khach') || '').trim().slice(0, 60);
-    GUEST.id = (q.get('id') || '').replace(/[^\w-]/g, '').slice(0, 20);
+    var to = (q.get('to') || '').trim();
+    var id = (q.get('id') || '').trim();
+    GUEST.id = (id || to).replace(/[^\w-]/g, '').slice(0, 20);
+    // Hỗ trợ các link cũ có ?to=Tên&id=Mã; link mới chỉ có mã trong `to`.
+    GUEST.name = (q.get('khach') || (id && to && to !== id ? to : '')).trim().slice(0, 60);
     var ben = (q.get('ben') || '').toLowerCase();
     GUEST.side = ben === 'gai' ? 'Nhà gái' : ben === 'trai' ? 'Nhà trai' : '';
-    if (GUEST.name) {
-      $$('.guest-name').forEach(function (el) { el.textContent = GUEST.name; });
-
-      // Cá nhân hóa mô tả trang theo tên trong link do Google Sheet tạo.
-      var desc = 'Trân trọng kính mời ' + GUEST.name
-        + ' đến dự Lễ Vu Quy của Phan Vũ & Quỳnh Như lúc 10:00, Thứ Bảy 17.10.2026 '
-        + '(tức 08/09 năm Bính Ngọ) tại Sân bóng thôn An Bình, Quảng Ngãi.';
-      [
-        'meta[name="description"]',
-        'meta[property="og:description"]',
-        'meta[name="twitter:description"]'
-      ].forEach(function (selector) {
-        var meta = $(selector);
-        if (meta) meta.setAttribute('content', desc);
-      });
-    }
+    if (GUEST.name) applyGuestInfo(GUEST);
   } catch (e) {}
 
   /* ---- Google Sheet (Apps Script) ---- */
@@ -101,6 +112,12 @@
   function apiGet(params) {
     return fetch(API + (API.indexOf('?') < 0 ? '?' : '&') + new URLSearchParams(params).toString())
       .then(function (r) { return r.json(); });
+  }
+  // Link mới chỉ mang mã khách; lấy tên từ Google Sheet để không lộ tiếng Việt đã mã hóa trên URL.
+  if (API && GUEST.id && !GUEST.name) {
+    apiGet({ action: 'guest', id: GUEST.id }).then(function (j) {
+      if (j && j.ok && j.guest) applyGuestInfo(j.guest);
+    }).catch(function () {});
   }
 
   /* ---- liên kết lịch & bản đồ ---- */

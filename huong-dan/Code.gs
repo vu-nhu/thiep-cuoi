@@ -121,7 +121,8 @@ function taoLinkMoi() {
     const ten = String(r[1] || '').trim();
     if (!ten) { r[4] = ''; r[5] = ''; return; }
     if (!r[0]) { r[0] = maMoi_(daCo); daCo[r[0]] = true; }
-    let link = goc + '?to=' + encodeURIComponent(ten) + '&id=' + r[0];
+    // Chỉ đưa mã khách vào link: tên tiếng Việt vẫn được lấy an toàn từ Sheet khi mở thiệp.
+    let link = goc + '?to=' + encodeURIComponent(r[0]);
     if (r[2] === 'Nhà gái') link += '&ben=gai';
     else if (r[2] === 'Nhà trai') link += '&ben=trai';
     r[4] = link;
@@ -145,11 +146,13 @@ function maMoi_(daCo) {
 /* ===================== API CHO THIỆP ===================== */
 
 /** GET ?action=wishes  → danh sách lời chúc đang hiển thị (mới nhất trước)
+ *  GET ?action=guest&id=… → tên và bên của khách theo mã
  *  GET ?action=open&id=… → ghi lại lúc khách mở thiệp */
 function doGet(e) {
   const p = (e && e.parameter) || {};
   try {
     if (p.action === 'wishes') return json_({ ok: true, wishes: layLoiChuc_() });
+    if (p.action === 'guest') return json_({ ok: true, guest: layKhach_(sach_(p.id, 20)) });
     if (p.action === 'open') { ghiMoThiep_(sach_(p.id, 20)); return json_({ ok: true }); }
     return json_({ ok: true, app: 'Thiệp cưới Vũ & Như' });
   } catch (err) {
@@ -223,6 +226,17 @@ function xoaBoNho_() {
 
 function ghiMoThiep_(id) {
   if (id) capNhatKhach_(id, 7, [new Date()]);
+}
+
+/** Trả dữ liệu tối thiểu để thiệp hiển thị đúng người nhận từ mã trong link. */
+function layKhach_(id) {
+  if (!id) return null;
+  const kh = SpreadsheetApp.getActive().getSheetByName(TEN.KHACH);
+  if (!kh || kh.getLastRow() < 2) return null;
+  const o = kh.getRange(2, 1, kh.getLastRow() - 1, 1).createTextFinder(id).matchEntireCell(true).findNext();
+  if (!o) return null;
+  const r = kh.getRange(o.getRow(), 2, 1, 2).getValues()[0];
+  return { name: sach_(r[0], 60), side: r[1] === 'Nhà gái' ? 'Nhà gái' : r[1] === 'Nhà trai' ? 'Nhà trai' : '' };
 }
 
 /** Ghi các giá trị liền nhau, bắt đầu từ cột `cot`, vào dòng của khách có mã `id` ở trang "Khách mời". */
