@@ -35,6 +35,11 @@ const COT = {
 const LINK_MAC_DINH = 'https://vu-nhu.github.io/thiep-cuoi/';
 const TIN_NHAN_MAC_DINH =
   'Thân gửi {ten},\n' +
+  'Vũ & Như trân trọng kính mời {ten} đến dự {le} của chúng mình lúc {gio}, {thu} {ngay} ' +
+  '(tức {amlich}) tại {diaDiem}.\n' +
+  'Thiệp mời: {link}';
+const TIN_NHAN_MAC_DINH_CU =
+  'Thân gửi {ten},\n' +
   'Vũ & Như trân trọng kính mời {ten} đến dự Lễ Vu Quy của chúng mình lúc 10:00, Thứ Bảy 17.10.2026 ' +
   '(tức 08/09 năm Bính Ngọ) tại Sân bóng thôn An Bình, Quảng Ngãi.\n' +
   'Thiệp mời: {link}';
@@ -79,7 +84,7 @@ function caiDat() {
   if (!cd.getRange('B1').getValue()) {
     cd.getRange('A1:B2').setValues([
       ['Link thiệp (trang web đã đưa lên mạng)', LINK_MAC_DINH],
-      ['Mẫu tin nhắn mời ({ten} = tên khách, {link} = link mời)', TIN_NHAN_MAC_DINH],
+      ['Mẫu tin nhắn mời ({ten}, {le}, {gio}, {thu}, {ngay}, {amlich}, {diaDiem}, {link})', TIN_NHAN_MAC_DINH],
     ]);
   }
   cd.getRange('A1:A2').setFontWeight('bold').setBackground('#F3EBDE').setVerticalAlignment('top');
@@ -112,7 +117,9 @@ function taoLinkMoi() {
 
   let goc = String(cd.getRange('B1').getValue() || LINK_MAC_DINH).trim();
   goc = goc.split('?')[0].split('#')[0];
-  const mau = String(cd.getRange('B2').getValue() || TIN_NHAN_MAC_DINH);
+  let mau = String(cd.getRange('B2').getValue() || TIN_NHAN_MAC_DINH);
+  // Tự nâng mẫu mặc định cũ để tin nhắn Nhà trai dùng đúng Lễ Tân Hôn.
+  if (mau === TIN_NHAN_MAC_DINH_CU) { mau = TIN_NHAN_MAC_DINH; cd.getRange('B2').setValue(mau); }
 
   const n = kh.getLastRow() - 1;
   if (n < 1) { SpreadsheetApp.getUi().alert('Bạn nhập tên khách vào cột B của trang "Khách mời" trước nhé.'); return; }
@@ -132,11 +139,26 @@ function taoLinkMoi() {
     else if (r[2] === 'Nhà trai') link += '&ben=trai';
     if (String(r[10] || '').trim() === 'Sang & Nga') link += '&sent=bame';
     r[4] = link;
-    r[5] = mau.split('{ten}').join(ten).split('{link}').join(link);
+    const le = thongTinLe_(r[2]);
+    r[5] = mau.split('{ten}').join(ten).split('{le}').join(le.ten)
+      .split('{gio}').join(le.gio).split('{thu}').join(le.thu).split('{ngay}').join(le.ngay)
+      .split('{amlich}').join(le.amLich).split('{diaDiem}').join(le.diaDiem).split('{link}').join(link);
     dem++;
   });
   kh.getRange(2, 1, n, 6).setValues(dl.map(function (r) { return r.slice(0, 6); }));
   ss.toast('Đã tạo ' + dem + ' link mời. Sao chép cột "Tin nhắn mời" để gửi qua Zalo/Messenger.', '💌 Thiệp cưới', 6);
+}
+
+/** Thông tin hiển thị theo cột "Khách của": Nhà trai = Lễ Tân Hôn, còn lại = Lễ Vu Quy. */
+function thongTinLe_(ben) {
+  if (ben === 'Nhà trai') return {
+    ten: 'Lễ Tân Hôn', gio: '11:00', thu: 'Thứ Năm', ngay: '29.10.2026',
+    amLich: '20/09 năm Bính Ngọ', diaDiem: 'Phước Lâm Viên, Đak Đoa, Gia Lai'
+  };
+  return {
+    ten: 'Lễ Vu Quy', gio: '10:00', thu: 'Thứ Bảy', ngay: '17.10.2026',
+    amLich: '08/09 năm Bính Ngọ', diaDiem: 'Sân bóng thôn An Bình, Quảng Ngãi'
+  };
 }
 
 function maMoi_(daCo) {

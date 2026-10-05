@@ -20,6 +20,25 @@
     place: 'Sân bóng thôn An Bình, Xã Trường Giang (Tịnh Đông cũ), Quảng Ngãi',
     mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=15.1729883,108.658986',
     mapEmbed: 'https://www.google.com/maps?q=15.1729883,108.658986&output=embed',
+    events: {
+      gai: {
+        name: 'Lễ Vu Quy', time: '10:00', weekday: 'Thứ Bảy', date: '17.10.2026',
+        start: '2026-10-17T10:00:00+07:00', end: '2026-10-17T13:00:00+07:00',
+        lunar: 'Tức ngày 08 tháng 09 năm Bính Ngọ',
+        place: 'Sân bóng thôn An Bình, Xã Trường Giang (Tịnh Đông cũ), Quảng Ngãi',
+        venue: 'Sân bóng thôn An Bình',
+        mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=15.1729883,108.658986',
+        mapEmbed: 'https://www.google.com/maps?q=15.1729883,108.658986&output=embed'
+      },
+      trai: {
+        name: 'Lễ Tân Hôn', time: '11:00', weekday: 'Thứ Năm', date: '29.10.2026',
+        start: '2026-10-29T11:00:00+07:00', end: '2026-10-29T14:00:00+07:00',
+        lunar: 'Tức ngày 20 tháng 09 năm Bính Ngọ',
+        place: 'Phước Lâm Viên, Đak Đoa, Gia Lai', venue: 'Phước Lâm Viên',
+        mapUrl: 'https://www.google.com/maps/dir/?api=1&destination=13.9874621,108.1129081',
+        mapEmbed: 'https://www.google.com/maps?q=13.9874621,108.1129081&output=embed'
+      }
+    },
     musicUrl: 'music/nhac-nen.mp3',
     album: [
       'img/album-1.jpg',
@@ -61,6 +80,26 @@
 
   /* ---- khách mời từ link: ?to=Anh%20Minh&id=k7f3qa&ben=trai (link tạo từ Google Sheet) ---- */
   var GUEST = { name: '', id: '', side: '' };
+  var EVENT = CONFIG.events.gai;
+  function useEvent(event) {
+    EVENT = event;
+    CONFIG.start = event.start; CONFIG.end = event.end;
+    CONFIG.title = event.name + ' Phan Vũ & Quỳnh Như';
+    CONFIG.place = event.place; CONFIG.mapUrl = event.mapUrl; CONFIG.mapEmbed = event.mapEmbed;
+    document.title = 'Thiệp cưới Phan Vũ & Quỳnh Như · ' + event.date;
+    var dateParts = event.date.split('.');
+    var setText = function (selector, value) { var el = $(selector); if (el) el.textContent = value; };
+    setText('.letter .d', event.date); setText('.hero-date', dateParts.join(' · '));
+    setText('#ev-title', event.name); setText('.event-at b', event.time);
+    var trio = $$('.trio span'); if (trio[0]) trio[0].textContent = event.weekday;
+    if (trio[1]) trio[1].textContent = 'Tháng ' + Number(dateParts[1]);
+    setText('.trio strong', dateParts[0]); setText('.year', dateParts[2]); setText('.lunar', event.lunar);
+    setText('.venue h3', event.venue); setText('.venue h3 + p', event.place);
+    var map = $('[data-map-embed]'); if (map) map.title = 'Bản đồ ' + event.venue;
+    setText('.cal-head b', 'Tháng ' + Number(dateParts[1])); setText('.cal-head span', dateParts[2]);
+    var cal = $('.cal'); if (cal) cal.setAttribute('aria-label', 'Lịch tháng ' + Number(dateParts[1]) + ' năm ' + dateParts[2] + ', ngày ' + Number(dateParts[0]) + ' được đánh dấu');
+    setText('#cam-on .sign small', dateParts.join(' · '));
+  }
   function applyGuestInfo(info) {
     if (!info || !info.name) return;
     GUEST.name = String(info.name).trim().slice(0, 60);
@@ -68,8 +107,8 @@
     $$('.guest-name').forEach(function (el) { el.textContent = GUEST.name; });
 
     var desc = 'Trân trọng kính mời ' + GUEST.name
-      + ' đến dự Lễ Vu Quy của Phan Vũ & Quỳnh Như lúc 10:00, Thứ Bảy 17.10.2026 '
-      + '(tức 08/09 năm Bính Ngọ) tại Sân bóng thôn An Bình, Quảng Ngãi.';
+      + ' đến dự ' + EVENT.name + ' của Phan Vũ & Quỳnh Như lúc ' + EVENT.time + ', ' + EVENT.weekday + ' ' + EVENT.date + ' '
+      + '(' + EVENT.lunar.replace('Tức ngày ', 'tức ngày ') + ') tại ' + EVENT.place + '.';
     [
       'meta[name="description"]',
       'meta[property="og:description"]',
@@ -94,12 +133,13 @@
     GUEST.name = (q.get('khach') || (id && to && to !== id ? to : '')).trim().slice(0, 60);
     var ben = (q.get('ben') || '').toLowerCase();
     GUEST.side = ben === 'gai' ? 'Nhà gái' : ben === 'trai' ? 'Nhà trai' : '';
-    if (GUEST.name) applyGuestInfo(GUEST);
     if (sent === 'bame') {
       var thanksSignName = $('#thanksSignName');
       if (thanksSignName) thanksSignName.textContent = 'Sang & Nga';
     }
   } catch (e) {}
+  useEvent(GUEST.side === 'Nhà trai' ? CONFIG.events.trai : CONFIG.events.gai);
+  if (GUEST.name) applyGuestInfo(GUEST);
 
   /* ---- Google Sheet (Apps Script) ---- */
   var API = (CONFIG.sheetApi || '').trim();
@@ -140,18 +180,20 @@
     if (f.getAttribute('src') !== CONFIG.mapEmbed) f.setAttribute('src', CONFIG.mapEmbed);
   });
 
-  /* ---- lịch tháng 10/2026 ---- */
+  /* ---- lịch ngày cưới ---- */
   (function buildCal() {
     var grid = $('#calGrid'); if (!grid) return;
     var html = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(function (w) { return '<span class="wd">' + w + '</span>'; }).join('');
-    var first = new Date(2026, 9, 1).getDay();          // 0 = CN
+    var first = new Date(startD.getFullYear(), startD.getMonth(), 1).getDay(); // 0 = CN
     var offset = (first + 6) % 7;                         // tuần bắt đầu thứ Hai
     for (var i = 0; i < offset; i++) html += '<span></span>';
-    for (var d = 1; d <= 31; d++) {
+    var days = new Date(startD.getFullYear(), startD.getMonth() + 1, 0).getDate();
+    for (var d = 1; d <= days; d++) {
       var col = (offset + d - 1) % 7;
-      var cls = 'd' + (col === 6 ? ' sun' : '') + (d === 17 ? ' mark' : '');
-      var heart = d === 17 ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11Z"/></svg>' : '';
-      html += '<span class="' + cls + '"' + (d === 17 ? ' aria-label="Ngày cưới 17"' : '') + '>' + heart + '<span>' + d + '</span></span>';
+      var marked = d === startD.getDate();
+      var cls = 'd' + (col === 6 ? ' sun' : '') + (marked ? ' mark' : '');
+      var heart = marked ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11Z"/></svg>' : '';
+      html += '<span class="' + cls + '"' + (marked ? ' aria-label="Ngày cưới ' + d + '"' : '') + '>' + heart + '<span>' + d + '</span></span>';
     }
     grid.innerHTML = html;
   })();
@@ -621,7 +663,7 @@
   function showDone(r) {
     $('#rsvpDoneTitle').textContent = 'Cảm ơn ' + r.name + '!';
     $('#rsvpDoneText').textContent = r.attend === 'yes'
-      ? 'Hẹn gặp ' + (r.guests > 1 ? 'cả nhà' : 'bạn') + ' lúc 10:00, Thứ Bảy 17.10.2026 tại Sân bóng thôn An Bình nhé.'
+      ? 'Hẹn gặp ' + (r.guests > 1 ? 'cả nhà' : 'bạn') + ' lúc ' + EVENT.time + ', ' + EVENT.weekday + ' ' + EVENT.date + ' tại ' + EVENT.venue + ' nhé.'
       : 'Tiếc quá! Cảm ơn bạn đã báo cho chúng mình biết. Mong sớm gặp lại bạn.';
     setSync(API ? (r.sent ? 'sent' : r.failed ? 'failed' : 'sending') : '');
     form.hidden = true; done.hidden = false;
